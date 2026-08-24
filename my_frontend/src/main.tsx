@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       { index: true, element: <IndexView /> },
       { path: "note/create", element: <CreateNoteView /> },
       { path: "register", element: <RegisterView /> },
-      { path: "/login", element: <LoginView /> },
+      { path: "login", element: <LoginView /> }, 
     ],
   },
 ]);
@@ -26,5 +26,5 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </StrictMode>
 );

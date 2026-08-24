@@ -1,76 +1,55 @@
 import { useState } from "react";
-import { useAuthStore } from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../stores/authStore";
 
 export default function RegisterView() {
-  const register = useAuthStore((state) => state.register);
-  const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    email: "",
-    username: "",
-    password: "",
-    password_confirm: "",
-  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
-    if (formData.password !== formData.password_confirm) {
-      setError("Пароли не совпадают");
+  const register = useAuthStore((s) => s.register);
+  const navigate = useNavigate();
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!username.trim() || !password.trim()) {
+      setError("Введите логин и пароль");
       return;
     }
 
-    const res = await register({
-      email: formData.email,
-      password: formData.password,
-      username: formData.username,
-    });
+    const result = await register(username, password);
 
-    if (!res.success) {
-      setError(res.error);
-    } else {
-      navigate("/login");
+    if (!result.ok) {
+      setError(result.error || "Ошибка регистрации");
+      return;
     }
+
+    navigate("/login");
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "300px" }}>
-      <input
-        value={formData.username}
-        onChange={(ev) =>
-          setFormData({ ...formData, username: ev.target.value })
-        }
-        placeholder="Логин"
-      />
+    <div className="auth-container">
+      <h2>Регистрация</h2>
 
-      <input
-        value={formData.email}
-        onChange={(ev) =>
-          setFormData({ ...formData, email: ev.target.value })
-        }
-        placeholder="E-Mail"
-      />
+      <form onSubmit={onSubmit}>
+        <input
+          placeholder="Логин"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-      <input
-        value={formData.password}
-        onChange={(ev) =>
-          setFormData({ ...formData, password: ev.target.value })
-        }
-        placeholder="Пароль"
-        type="password"
-      />
+        <input
+          placeholder="Пароль"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <input
-        value={formData.password_confirm}
-        onChange={(ev) =>
-          setFormData({ ...formData, password_confirm: ev.target.value })
-        }
-        placeholder="Повторите пароль"
-        type="password"
-      />
+        <button type="submit">Создать аккаунт</button>
+      </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <button onClick={handleSubmit}>Зарегистрироваться</button>
+      {error && <div className="error">{error}</div>}
     </div>
   );
 }

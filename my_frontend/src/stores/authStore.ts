@@ -1,74 +1,51 @@
 import { create } from "zustand";
-import type {
-  CreateUser,
-  User,
-  UserLoginRequest,
-  UserLoginResponse,
-} from "../types/user";
 import { api } from "../api/ax";
-import { AxiosError } from "axios";
 
-export interface RegisterResult {
-  success: boolean;
-  error: string | null;
-}
+type AuthState = {
+  username: string;
+  userId: string;
+  isAuth: boolean;
+  login: (username: string, password: string) => Promise<{ ok: boolean; error?: string }>;
+  register: (username: string, password: string) => Promise<{ ok: boolean; error?: string }>;
+  logout: () => void;
+};
 
-interface AuthState {
-  user: User | null;
-  error: string | null;
+export const useAuthStore = create<AuthState>((set) => ({
+  username: "",
+  userId: "",
+  isAuth: false,
 
-  register: (data: CreateUser) => Promise<RegisterResult>;
-  login: (data: UserLoginRequest) => Promise<RegisterResult>;
-  getAccessToken: () => string | null;
-  setAccessToken: (token: string | null) => void;
-  loadUser: () => Promise<void>;
-  logout: () => Promise<void>;
-}
-
-export const useAuthStore = create<AuthState>((set, get) => ({
-  user: null,
-  error: null,
-
-  register: async (data: CreateUser) => {
+  login: async (username, password) => {
     try {
-      const resp = await api.post("/auth/register", data);
-      return { success: true, error: null };
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const resp_code = error.response?.status;
-        if (resp_code == 422) {
-          let errors: string[] = error.response?.data.detail.map(
-            (entry) => entry.msg,
-          );
-          return { success: false, error: errors.join("\n") };
-        } else if (resp_code == 400) {
-          return { success: false, error: "Такой пользователь уже существует" };
-        }
-        return { success: false, error: "Ошибка при выполнении запроса" };
-      } else {
-        return { success: false, error: "Ошибка при выполнении запроса" };
-      }
+      const resp = await api.post("/auth/login", { username, password });
+
+      localStorage.setItem("token", resp.data.access_token);
+
+      set({
+        username: resp.data.username,
+        userId: resp.data.user_id,   // ← ВАЖНО
+        isAuth: true,
+      });
+
+      return { ok: true };
+    } catch (err: any) {
+      const msg = err.response?.data?.detail || "Ошибка входа";
+      return { ok: false, error: msg };
     }
   },
-  login: async (data: UserLoginRequest) => {
+
+  register: async (username, password) => {
     try {
-      const resp = await api.post<UserLoginResponse>("/auth/login", data);
-      get().setAccessToken(resp.data.access_token);
-      return { success: true, error: "" };
-    } catch (err) {
-      return { success: false, error: "Не удалось войти" };
+      await api.post("/auth/register", { username, password });
+      return { ok: true };
+    } catch (err: any) {
+      const msg = err.response?.data?.detail || "Ошибка регистрации";
+      return { ok: false, error: msg };
     }
   },
-  getAccessToken: () => {
-    return localStorage.getItem("access_token");
+
+  logout: () => {
+    localStorage.removeItem("token");
+    set({ username: "", userId: "", isAuth: false });
   },
-  setAccessToken: (token) => {
-    if (token == null) {
-      localStorage.removeItem("access_token");
-    } else {
-      localStorage.setItem("access_token", token);
-    }
-  },
-  loadUser: async () => {},
-  logout: async () => {},
 }));

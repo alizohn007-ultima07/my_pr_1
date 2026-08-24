@@ -1,7 +1,18 @@
 import { create } from "zustand";
 import { api } from "../api/ax";
 
-export const useNoteStore = create((set) => ({
+export type Note = {
+  id: string;
+  title: string;
+  content: string;
+};
+
+type NoteState = {
+  notes: Note[];
+  loadNotes: () => Promise<void>;
+};
+
+export const useNoteStore = create<NoteState>((set) => ({
   notes: [],
 
   loadNotes: async () => {

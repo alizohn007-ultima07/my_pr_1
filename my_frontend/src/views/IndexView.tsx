@@ -1,18 +1,20 @@
 import { useEffect } from "react";
 import { useNoteStore } from "../stores/noteStore";
-import { useLoginStore } from "../stores/loginStore";
 import { useCommentStore } from "../stores/commentStore";
+import { useAuthStore } from "../stores/authStore";
 import Note from "../components/Note";
 
 export default function IndexView() {
   const notes = useNoteStore((s) => s.notes);
   const loadNotes = useNoteStore((s) => s.loadNotes);
-  const userId = useLoginStore((s) => s.userId);
   const commentStore = useCommentStore();
+  const isAuth = useAuthStore((s) => s.isAuth);
 
   useEffect(() => {
-    if (userId) loadNotes();
-  }, [userId]);
+    if (isAuth) {
+      loadNotes();
+    }
+  }, [isAuth]);
 
   useEffect(() => {
     notes.forEach((note) => {
@@ -20,7 +22,7 @@ export default function IndexView() {
     });
   }, [notes]);
 
-  if (!Array.isArray(notes)) return null;
+  if (!isAuth) return <div>Нужно войти</div>;
 
   return (
     <div className="notes-card-container">
