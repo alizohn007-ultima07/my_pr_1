@@ -23,7 +23,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       set({
         username: resp.data.username,
-        userId: resp.data.user_id,   // ← ВАЖНО
+        userId: resp.data.user_id,   // ← ВАЖНО только для меня
         isAuth: true,
       });
 

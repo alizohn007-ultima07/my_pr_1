@@ -3,6 +3,8 @@ import { useNoteStore } from "../stores/noteStore";
 import { useCommentStore } from "../stores/commentStore";
 import { useAuthStore } from "../stores/authStore";
 import Note from "../components/Note";
+import "../styles/IndexView.css";
+
 
 export default function IndexView() {
   const notes = useNoteStore((s) => s.notes);
@@ -22,7 +24,9 @@ export default function IndexView() {
     });
   }, [notes]);
 
-  if (!isAuth) return <div>Нужно войти</div>;
+  if (!isAuth) {
+    return <div className="not-auth">Зайди для просмотра</div>;
+  }
 
   return (
     <div className="notes-card-container">

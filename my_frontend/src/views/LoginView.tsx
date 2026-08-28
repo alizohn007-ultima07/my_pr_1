@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
+import "../styles/Login.css";
 
 export default function LoginView() {
   const [username, setUsername] = useState("");
@@ -21,7 +22,7 @@ export default function LoginView() {
     const result = await login(username, password);
 
     if (!result.ok) {
-      setError(result.error || "Ошибка входа");
+      setError(result.error || "Неверный логин или пароль");
       return;
     }
 
@@ -29,27 +30,31 @@ export default function LoginView() {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Вход</h2>
+    <div className="login-container">
+      <h2 className="login-title">Вход</h2>
 
       <form onSubmit={onSubmit}>
         <input
+          className="login-input"
           placeholder="Логин"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
+          className="login-input"
           placeholder="Пароль"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit">Войти</button>
+        <button className="login-btn" type="submit">
+          Войти
+        </button>
       </form>
 
-      {error && <div className="error">{error}</div>}
+      {error && <div className="login-error">{error}</div>}
     </div>
   );
 }

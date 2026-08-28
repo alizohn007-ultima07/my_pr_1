@@ -1,4 +1,4 @@
-.register-container {
+.login-container {
   background: var(--card-bg);
   padding: 24px;
   border-radius: 18px;
@@ -8,13 +8,13 @@
   animation: slideUp 0.35s ease;
 }
 
-.register-title {
+.login-title {
   text-align: center;
   margin-bottom: 20px;
   font-size: 24px;
 }
 
-.register-input {
+.login-input {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
@@ -23,7 +23,7 @@
   font-size: 16px;
 }
 
-.register-btn {
+.login-btn {
   background-color: var(--btn-bg);
   color: white;
   padding: 12px;
@@ -35,14 +35,15 @@
   transition: 0.25s ease;
 }
 
-.register-btn:hover {
+.login-btn:hover {
   background-color: #003bbd;
   transform: translateY(-2px);
 }
 
-.register-message {
+.login-error {
   margin-top: 12px;
-  background: white;
+  background: #ffdddd;
+  color: #a30000;
   padding: 10px;
   border-radius: 10px;
   text-align: center;
@@ -59,3 +60,4 @@
     opacity: 1;
   }
 }
+    

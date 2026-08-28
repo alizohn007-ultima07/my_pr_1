@@ -1,0 +1,28 @@
+.note-card {
+  background: var(--card-bg);
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+
+  /* Анимация появления */
+  animation: cardFadeIn 0.45s ease;
+
+  /* Анимация при наведении */
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

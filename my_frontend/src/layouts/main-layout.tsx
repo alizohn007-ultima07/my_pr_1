@@ -1,15 +1,21 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
+import "../styles/Navbar.css";
 
-export default function Root() {
+export default function MainLayout() {
   return (
-    <div>
-      <nav>
-        <Link to="/">Главная</Link>
-        <Link to="/note/create">Создать заметку</Link>
-        <Link to="/register">Регистрация</Link>
-        <Link to="/login">Войти</Link>
+    <div className="layout">
+      <nav className="nav">
+        <div className="nav-center">
+          <Link to="/" className="nav-link">Главная</Link>
+          <Link to="/note/create" className="nav-link">Создать заметку</Link>
+          <Link to="/register" className="nav-link">Регистрация</Link>
+          <Link to="/login" className="nav-link">Войти</Link>
+        </div>
       </nav>
-      <Outlet></Outlet>
+
+      <main className="layout-main">
+        <Outlet />
+      </main>
     </div>
   );
 }

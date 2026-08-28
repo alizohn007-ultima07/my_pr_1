@@ -4,52 +4,55 @@ import NoteTag from "./NoteTag";
 import "../styles/NoteCreate.css";
 import { useNoteStore } from "../stores/noteStore";
 
-// (DELETE) https://learnapi.kpn3o.ru/notes/123?author=kpn3o
-// const req_url = `${BASE_API_URL}/notes/${note_data.id}?author=${MY_AUTHOR_NAME}`
-
 export default function NoteCreate() {
   const [note_data, setNoteData] = useState<NoteCreate>({
-      content: "",
+    content: "",
     tags: [],
     title: "",
   });
+
   const [add_tag_flag, setAddTagFlag] = useState(false);
   const [new_tag_text, setNewTagText] = useState("");
+
   const createNote = useNoteStore((state) => state.create);
+
   return (
-    <div className="create-note-container">
+    <div className="note-create-container">
       <div>
-        <label htmlFor="note-title-input">Название:</label>
+        <label htmlFor="note-title-input">имя автора:</label>
         <input
-          className="input"
+          className="note-input"
           value={note_data.title}
-          onChange={(ev) => {
+          onChange={(ev) =>
             setNoteData({
               ...note_data,
               tags: [...note_data.tags],
               title: ev.target.value,
-            });
-          }}
+            })
+          }
           id="note-title-input"
-        ></input>
+        />
       </div>
+
       <div>
         <textarea
-          className="input"
+          className="note-textarea"
           value={note_data.content}
-          onChange={(ev) => {
+          onChange={(ev) =>
             setNoteData({
               ...note_data,
               tags: [...note_data.tags],
               content: ev.target.value,
-            });
-          }}
-        ></textarea>
+            })
+          }
+        />
       </div>
+
       <div>
-        {note_data?.tags.map((tag) => (
-          <NoteTag text={tag} />
+        {note_data.tags.map((tag, index) => (
+          <NoteTag key={index} text={tag} />
         ))}
+
         {add_tag_flag ? (
           <NoteTag
             text={new_tag_text}
@@ -62,22 +65,20 @@ export default function NoteCreate() {
               setNewTagText("");
               setAddTagFlag(false);
             }}
-            change_handler={(ev) => {
-              setNewTagText(ev.target.value);
-            }}
+            change_handler={(ev) => setNewTagText(ev.target.value)}
           />
         ) : (
           <button
             className="add-tag-button"
-            onClick={() => {
-              setAddTagFlag(true);
-            }}
+            onClick={() => setAddTagFlag(true)}
           >
             +
           </button>
         )}
       </div>
+
       <button
+        className="note-create-btn"
         onClick={async () => {
           await createNote(note_data);
         }}

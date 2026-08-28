@@ -3,3 +3,9 @@
   display: flex;
   justify-content: center;
 }
+
+body {
+  background-color: #48001f;
+  margin: 0;
+  padding: 0;
+}

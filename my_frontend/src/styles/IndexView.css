@@ -1,0 +1,26 @@
+/* Контейнер всей главной страницы */
+.notes-card-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+
+  animation: fadeIn 0.4s ease;
+}
+
+/* Сообщение "Зайди для просмотра" */
+.not-auth {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 80px;
+  opacity: 0.7;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

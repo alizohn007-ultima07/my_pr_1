@@ -10,7 +10,7 @@ export type Comment = {
 };
 
 type CommentState = {
-  comments: Record<string, Comment[]>; // noteId -> comments[]
+  comments: Record<string, Comment[]>;
   loadComments: (noteId: string) => Promise<void>;
   addComment: (noteId: string, content: string) => Promise<void>;
   deleteComment: (commentId: string) => Promise<void>;

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useAuthStore } from "../stores/authStore";
 import type { Comment } from "../stores/commentStore";
+import "../styles/NoteCard.css";
+
 
 type Props = {
   id: string;

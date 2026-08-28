@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
+import Register from "../components/Register";
 
 export default function RegisterView() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const register = useAuthStore((s) => s.register);
   const navigate = useNavigate();
+  const register = useAuthStore((s) => s.register);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleRegister = async (username: string, password: string) => {
     if (!username.trim() || !password.trim()) {
       setError("Введите логин и пароль");
       return;
@@ -29,27 +25,9 @@ export default function RegisterView() {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Регистрация</h2>
-
-      <form onSubmit={onSubmit}>
-        <input
-          placeholder="Логин"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-
-        <input
-          placeholder="Пароль"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button type="submit">Создать аккаунт</button>
-      </form>
-
-      {error && <div className="error">{error}</div>}
-    </div>
+    <Register
+      onSubmit={handleRegister}
+      error={error}
+    />
   );
 }
